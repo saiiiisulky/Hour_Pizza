@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hour Pizza - Profile</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(180deg, #f4e6ff, #ffffff);
+    padding-top: 70px;
+  }
+
+  /* NAVBAR */
+  .navbar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    background: #fff;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    z-index: 200;
+  }
+
+  .navbar h1 {
+    margin: 0;
+    font-size: 22px;
+    color: #8200da;
+    font-weight: 700;
+  }
+
+  /* PROFILE CARD */
+  .profile-card {
+    max-width: 500px;
+    margin: auto;
+    background: #fff;
+    padding: 28px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    animation: fadeIn .3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  .header { text-align: center; margin-bottom: 20px; }
+  .header h2 { margin: 0; color: #8200da; font-size: 28px; }
+
+  .input-group { margin-bottom: 18px; }
+  .input-group label { font-weight: 600; display: block; margin-bottom: 6px; color: #444; }
+
+  .input-group input,
+  .input-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: .2s;
+  }
+
+  input[disabled], textarea[disabled] {
+    background: #f3f3f3;
+    cursor: not-allowed;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-edit { background: #8200da; color: #fff; }
+  .btn-save {
+    background: linear-gradient(90deg, #c32df1, #ff4f9a);
+    color: #fff;
+    display: none;
+  }
+
+  .btn-back {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 10px;
+    background: white;
+    border: 2px solid #8200da;
+    color: #8200da;
+    cursor: pointer;
+  }
+
+  /* PASSWORD SECTION */
+  .password-section {
+    margin-top: 30px;
+    border-top: 2px solid #eee;
+    padding-top: 20px;
+  }
+
+  .password-section h3 {
+    text-align: center;
+    color: #8200da;
+    font-size: 20px;
+  }
+
+  .toggle-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    background: #8200da;
+    color: white;
+    cursor: pointer;
+    margin-left: 8px;
+  }
+
+  .match-text {
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
+
+  .meter {
+    height: 8px;
+    background: #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .meter-fill {
+    height: 100%;
+    width: 0%;
+    background: #ff4f9a;
+    transition: width .3s;
+  }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <h1>Hour Pizza</h1>
+</header>
+
+<div class="profile-card">
+
+  <!-- PROFILE HEADER -->
+  <div class="header">
+    <h2>Your Profile</h2>
+  </div>
+
+  <button class="btn btn-edit" onclick="enableEdit()">Edit Profile</button>
+
+  <!-- PROFILE FIELDS -->
+  <div class="input-group"><label>First Name</label><input disabled id="firstName"></div>
+  <div class="input-group"><label>Last Name</label><input disabled id="lastName"></div>
+  <div class="input-group"><label>Age</label><input disabled type="number" id="age"></div>
+  <div class="input-group"><label>Birthday</label><input disabled type="date" id="birthday"></div>
+  <div class="input-group"><label>Phone Number</label><input disabled id="phone"></div>
+  <div class="input-group"><label>Address</label><textarea disabled id="address"></textarea></div>
+
+  <button class="btn btn-save" id="saveBtn" onclick="saveProfile()">Save Profile</button>
+
+
+
+
+  <!-- PASSWORD SECTION -->
+  <div class="password-section">
+
+    <h3>Account Security</h3>
+
+    <div class="input-group">
+      <label>Email (Cannot be changed)</label>
+      <input disabled id="email" type="email">
+    </div>
+
+    <!-- Current password -->
+    <div class="input-group">
+      <label>Current Password</label>
+      <div style="display:flex; align-items:center;">
+        <input disabled type="password" id="currentPass">
+        <button class="toggle-btn" onclick="toggleView('currentPass', this)">Show</button>
+      </div>
+    </div>
+
+    <!-- Open panel link -->
+    <p id="togglePanel" style="cursor:pointer; color:#8200da; text-align:right;">Change Password?</p>
+
+    <!-- Hidden Panel -->
+    <div id="passwordPanel" style="display:none;">
+
+      <div class="input-group">
+        <label>New Password</label>
+        <div style="display:flex; align-items:center;">
+          <input type="password" id="newPass">
+          <button class="toggle-btn" onclick="toggleView('newPass', this)">Show</button>
+        </div>
+
+        <!-- Strength meter -->
+        <div class="meter"><div class="meter-fill" id="strengthBar"></div></div>
+      </div>
+
+      <div class="input-group">
+        <label>Confirm Password</label>
+        <div style="display:flex; align-items:center;">
+          <input type="password" id="confirmPass">
+          <button class="toggle-btn" onclick="toggleView('confirmPass', this)">Show</button>
+        </div>
+        <p id="matchText" class="match-text"></p>
+      </div>
+
+      <button class="btn" style="background:#8200da; color:#fff;" onclick="updatePassword()">
+        Update Password
+      </button>
+
+    </div>
+  </div>
+
+  <button class="btn-back" onclick="goHome()">Back to Home</button>
+
+</div>
+
+
+<!-- SCRIPT -->
+<script>
+/* -------------------------------
+   LOAD PROFILE DATA
+--------------------------------*/
+function loadProfile() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user) {
+    // Fill name
+    if (document.getElementById("firstName")) {
+      // If your profile separates first & last name:
+      // ✅ USE THIS
+        firstName.value = user.firstName || "";
+        lastName.value = user.lastName || "";
+
+    }
+
+    // Fill email
+    document.getElementById("email").value = user.email;
+
+    // Fill current password (but disabled)
+    currentPass.value = user.pass;
+  }
+
+  // Keep your saved profile fields
+  age.value = localStorage.getItem("profile_age") || "";
+  birthday.value = localStorage.getItem("profile_birthday") || "";
+  phone.value = localStorage.getItem("profile_phone") || "";
+  address.value = localStorage.getItem("profile_address") || "";
+}
+loadProfile();
+
+
+/* -------------------------------
+   ENABLE EDIT MODE
+--------------------------------*/
+function enableEdit() {
+  document.querySelectorAll("#firstName, #lastName, #age, #birthday, #phone, #address")
+    .forEach(el => el.disabled = false);
+  saveBtn.style.display = "block";
+}
+
+/* -------------------------------
+   SAVE PROFILE
+--------------------------------*/
+function saveProfile() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  // ✅ SAVE BACK TO USER OBJECT
+  user.firstName = firstName.value;
+  user.lastName = lastName.value;
+
+  localStorage.setItem("user", JSON.stringify(user));
+
+  // Other profile fields
+  localStorage.setItem("profile_age", age.value);
+  localStorage.setItem("profile_birthday", birthday.value);
+  localStorage.setItem("profile_phone", phone.value);
+  localStorage.setItem("profile_address", address.value);
+
+  alert("Profile updated!");
+  saveBtn.style.display = "none";
+
+  document
+    .querySelectorAll("#firstName, #lastName, #age, #birthday, #phone, #address")
+    .forEach(el => el.disabled = true);
+}
+/* -------------------------------
+   PASSWORD PANEL OPEN/CLOSE
+--------------------------------*/
+document.getElementById("togglePanel").onclick = function () {
+  const panel = document.getElementById("passwordPanel");
+  const open = panel.style.display === "none";
+
+  panel.style.display = open ? "block" : "none";
+
+  // When opening, let the user type their current password
+  currentPass.disabled = false;
+  currentPass.value = "";
+
+  // Reset UI helpers
+  newPass.value = "";
+  confirmPass.value = "";
+  document.getElementById("matchText").textContent = "";
+  document.getElementById("strengthBar").style.width = "0%";
+};
+
+
+
+/* -------------------------------
+   TOGGLE PASSWORD VISIBILITY
+--------------------------------*/
+function toggleView(id, btn) {
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+  btn.textContent = btn.textContent === "Show" ? "Hide" : "Show";
+}
+
+
+/* -------------------------------
+   LIVE MATCH CHECK
+--------------------------------*/
+document.getElementById("confirmPass").addEventListener("input", () => {
+  const matchText = document.getElementById("matchText");
+  const newP = newPass.value;
+  const confirm = confirmPass.value;
+
+  if (!confirm) { matchText.textContent = ""; return; }
+
+  matchText.textContent =
+    newP === confirm ? "✔ Passwords match" : "✘ Passwords do not match";
+
+  matchText.style.color =
+    newP === confirm ? "green" : "red";
+});
+
+
+/* -------------------------------
+   PASSWORD STRENGTH METER
+--------------------------------*/
+document.getElementById("newPass").addEventListener("input", () => {
+  const bar = document.getElementById("strengthBar");
+  const val = newPass.value;
+
+  let score = 0;
+  if (val.length >= 6) score += 25;
+  if (/[A-Z]/.test(val)) score += 25;
+  if (/[0-9]/.test(val)) score += 25;
+  if (/[^A-Za-z0-9]/.test(val)) score += 25;
+
+  bar.style.width = score + "%";
+});
+
+
+/* -------------------------------
+   UPDATE PASSWORD
+--------------------------------*/
+function updatePassword() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const current = currentPass.value;
+  const newP = newPass.value;
+  const confirm = confirmPass.value;
+
+  if(current !== user.pass){
+    alert("Incorrect current password.");
+    return;
+  }
+
+  if(newP.length < 6){
+    alert("Password must be at least 6 characters.");
+    return;
+  }
+
+  if(newP !== confirm){
+    alert("Passwords do not match.");
+    return;
+  }
+
+  user.pass = newP;
+  localStorage.setItem("user", JSON.stringify(user));
+
+  alert("Password updated successfully!");
+  document.getElementById("passwordPanel").style.display = "none";
+
+  currentPass.value = newP;
+  newPass.value = "";
+  confirmPass.value = "";
+}
+
+
+
+/* -------------------------------
+   NAVIGATION
+--------------------------------*/
+function goHome() {
+  window.location.href = "home.html";
+}
+
+</script>
+
+</body>
+</html>

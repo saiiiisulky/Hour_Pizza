@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders - Hour Pizza</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:#f6f0ff;
+  color:#222;
+}
+
+/* HEADER */
+.header{
+  background:#fff;
+  padding:16px 20px;
+  border-bottom:1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.header h2{
+  margin:0;
+  color:#8200da;
+}
+.back-btn{
+  background:none;
+  border:none;
+  color:#8200da;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* PAGE */
+.container{
+  max-width:900px;
+  margin:24px auto;
+  padding:0 16px;
+}
+
+.order-card{
+  background:#fff;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:16px;
+  box-shadow:0 6px 20px rgba(0,0,0,.06);
+}
+
+.order-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.order-id{
+  font-weight:700;
+}
+.order-date{
+  font-size:13px;
+  color:#777;
+}
+
+.item{
+  background:#faf7ff;
+  padding:10px;
+  border-radius:12px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+
+.total{
+  display:flex;
+  justify-content:space-between;
+  margin-top:12px;
+  font-weight:700;
+}
+
+.status{
+  margin-top:10px;
+  font-size:13px;
+  font-weight:700;
+  color:#e50076;
+}
+
+.status.cancelled{
+  color:#d60000;
+}
+
+.empty{
+  text-align:center;
+  color:#777;
+  margin-top:60px;
+}
+
+.cancel-btn{
+  margin-top:10px;
+  background:#61154c;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+.cancel-btn:hover{
+  background:#552951;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <button class="back-btn" onclick="window.location.href='home.html'">← Back</button>
+  <h2>My Orders</h2>
+</div>
+
+<div class="container" id="ordersContainer"></div>
+<p class="empty" id="noOrders">You have no orders yet.</p>
+
+function formatPeso(amount) {
+  return '₱' + Math.round(amount).toLocaleString('en-PH');
+}
+
+<script>
+const ordersContainer = document.getElementById('ordersContainer');
+const noOrders = document.getElementById('noOrders');
+
+function getOrders() {
+  return JSON.parse(localStorage.getItem('hp_orders') || '[]');
+}
+
+function saveOrders(orders) {
+  localStorage.setItem('hp_orders', JSON.stringify(orders));
+}
+
+function renderOrders() {
+  const orders = getOrders();
+  ordersContainer.innerHTML = '';
+
+  if (orders.length === 0) {
+    noOrders.style.display = 'block';
+    return;
+  }
+
+  noOrders.style.display = 'none';
+
+  orders.slice().reverse().forEach(order => {
+    if (!order.status) order.status = 'Pending';
+
+    const card = document.createElement('div');
+    card.className = 'order-card';
+
+    let itemsHTML = '';
+    order.items.forEach(item => {
+      itemsHTML += `
+        <div class="item">
+          <strong>${item.name}</strong> (${item.size}) × ${item.quantity}<br>
+          <span style="font-size:13px;color:#555">
+            ${item.toppings.length ? item.toppings.join(', ') : 'No extra toppings'}
+          </span><br>
+          <strong>${formatPeso(item.price)}</strong>
+        </div>
+      `;
+    });
+
+    card.innerHTML = `
+      <div class="order-header">
+        <div class="order-id">Order #${order.id}</div>
+        <div class="order-date">${order.date}</div>
+      </div>
+
+      <button class="details-btn">View Details</button>
+
+      <div class="order-items" style="display:none">
+        ${itemsHTML}
+      </div>
+
+      <div class="total">
+        <span>Total</span>
+        <span>${formatPeso(order.total)}</span>
+      </div>
+
+      <div class="status ${order.status === 'Deleted' ? 'cancelled' : ''}">
+        Status: ${order.status}
+      </div>
+
+      ${
+        order.status === 'Pending'
+          ? `<button class="cancel-btn" data-id="${order.id}">Cancel Order</button>`
+          : ''
+      }
+    `;
+
+    ordersContainer.appendChild(card);
+
+    // DETAILS TOGGLE
+    card.querySelector('.details-btn').onclick = () => {
+      const items = card.querySelector('.order-items');
+      const open = items.style.display === 'block';
+      items.style.display = open ? 'none' : 'block';
+    };
+
+    // CANCEL
+    const cancelBtn = card.querySelector('.cancel-btn');
+    if (cancelBtn) {
+      cancelBtn.onclick = () => cancelOrder(order.id);
+    }
+  });
+
+  saveOrders(orders);
+}
+
+function cancelOrder(id) {
+  if (!confirm('Are you sure you want to cancel this order?')) return;
+
+  const orders = getOrders().map(order =>
+    order.id === id ? { ...order, status: 'Deleted' } : order
+  );
+
+  saveOrders(orders);
+  renderOrders();
+}
+
+// INITIAL LOAD
+renderOrders();
+</script>
+
+</body>
+</html>

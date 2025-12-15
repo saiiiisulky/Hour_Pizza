@@ -1,0 +1,276 @@
+/* === GLOBAL === */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(180deg, #f4e6ff, #ffffff);
+}
+
+/* === NAVBAR === */
+.navbar {
+  width: 100%;
+  padding: 18px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar .logo img {
+  width: 50px;
+  height: 50px;
+}
+
+.navbar nav button {
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+/* === HERO SECTION === */
+.hero {
+  text-align: center;
+  background: linear-gradient(90deg, #9b23ea, #e94057);
+  color: white;
+  padding: 60px 20px;
+  font-size: 20px;
+  font-weight: 500;
+  border-radius: 0 0 20px 20px;
+  margin-bottom: 40px;
+}
+
+.hero h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* === PRODUCT SECTION === */
+.products {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 20px 40px;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 320px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card .image {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+/* Example placeholder images; replace with real images later */
+.pepperoni { background-image: url('https://images.pexels.com/photos/2619967/pexels-photo-2619967.jpeg'); }
+.margherita { background-image: url('https://images.pexels.com/photos/1596888/pexels-photo-1596888.jpeg'); }
+.veggie { background-image: url('https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg'); }
+
+/* Tag Badge (Classic / Vegetarian) */
+.tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #d41aff;
+  padding: 6px 14px;
+  color: white;
+  font-size: 13px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* Vegetarian Tag Color */
+.image + .tag.Vegetarian {
+  background: #3ecf62 !important;
+}
+
+/* CARD CONTENT */
+.card h3 {
+  margin: 16px;
+  font-size: 20px;
+}
+
+.card p {
+  margin: 0 16px;
+  color: #555;
+  font-size: 15px;
+  height: 60px;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+
+.price {
+  font-size: 17px;
+  font-weight: 700;
+  color: #333;
+}
+
+.bottom button {
+  background: linear-gradient(90deg, #c32df1, #ff4f9a);
+  border: none;
+  padding: 10px 18px;
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 900px) {
+  .products {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 90%;
+  }
+}
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #8200da;
+  display: flex;
+  align-items: center;
+}
+.icon-btn i {
+  font-size: 24px;
+}
+.icon-btn {
+  position: relative;
+}
+
+#navCount {
+  position: absolute;
+  top: -4px;     /* raised a bit */
+  right: -19px;  /* moved further right */
+  background: #e50076;
+  color: #fff;
+  font-size: 9px;
+  padding: 4px 4px;
+  border-radius: 50%;
+  min-width: 18px;
+  text-align: center;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.icon-btn i {
+  line-height: 1;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Profile Dropdown */
+.dropdown {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  width: 215px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: 0.22s ease;
+  z-index: 999;
+}
+
+.dropdown.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Gradient header box */
+.logged-in-box {
+  padding: 16px 18px;
+  background: linear-gradient(135deg, #8200da, #e50076);
+  color: white;
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+}
+
+.logged-in-box .label {
+  font-size: 11px;
+  margin: 0;
+  opacity: 0.85;
+}
+
+.logged-in-box .email {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 2px 0 0 0;
+}
+
+/* Dropdown options */
+.dropdown button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 12px;        /* SMALLER FONT */
+  font-weight: 500;
+  cursor: pointer;
+  color: #333;
+  transition: 0.18s ease;
+}
+
+.dropdown button i {
+  font-size: 15px;        /* Icon size */
+  color: #8200da;
+}
+
+.dropdown button:hover {
+  background: #f5e6ff;
+  color: #8200da;
+}

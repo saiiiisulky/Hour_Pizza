@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hour Pizza - Home</title>
+
+  <!-- ICONS (FIXED HEAD TAG) -->
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css">
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css">
+
+  <style>
+    body{margin:0;font-family:Inter,Arial,sans-serif;background:#fff;color:#222}
+
+    /* NAVBAR */
+    .navbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:100}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo img{width:46px;height:46px;border-radius:10px}
+    .logo h1{margin:0;font-size:20px;color:#8200da}
+    nav{display:flex;gap:16px}
+    nav button{background:none;border:none;font-size:20px;color:#8200da;cursor:pointer;position:relative}
+
+    /* DROPDOWNS (PROFILE + MENU ITEMS) */
+    .dropdown{position:absolute;top:56px;right:0;background:#fff;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.14);padding:12px;min-width:220px;z-index:200}
+    .dropdown .label{font-size:12px;color:#777;margin:0}
+    .dropdown .email{font-weight:700;margin:4px 0 10px}
+    .dropdown button{width:100%;background:none;border:none;padding:12px;border-radius:10px;text-align:left;font-weight:600;cursor:pointer}
+    .dropdown button:hover{background:#f3e8ff;color:#6f1ab3}
+
+    /* HAMBURGER MENU */
+    .menu-panel button{width:100%;background:none;border:none;padding:12px;border-radius:10px;font-weight:600;text-align:left;cursor:pointer}
+    .menu-panel button:hover{background:#f3e8ff}
+    .menu-panel .logout{background:#e50076;color:#fff;text-align:center}
+    .menu-panel .logout:hover{background:#c80064}
+
+    /* HERO */
+    .hero{max-width:1100px;margin:28px auto;background:linear-gradient(160deg,#59168b,#8200da,#e50076);color:#fff;padding:40px;border-radius:14px;text-align:center}
+    .hero h2{margin:0;font-size:26px}
+    .hero p{margin-top:10px;opacity:.95}
+
+    /* SEARCH */
+    .search-bar{display:flex;justify-content:center;margin:18px 0}
+    .search-bar input{width:70%;max-width:720px;padding:12px 16px;border-radius:999px;border:1px solid #eee;font-size:15px}
+
+    /* PRODUCTS */
+    .products{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;padding:24px;max-width:1200px;margin:auto}
+    .card{width:320px;background:#fff;border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column}
+    .card .image{height:200px;background-size:cover;background-position:center}
+    .tag{position:absolute;right:14px;top:14px;background:#8200da;color:#fff;padding:6px 12px;border-radius:20px;font-weight:700;font-size:13px}
+    .card-content{padding:16px}
+    .bottom{display:flex;justify-content:space-between;align-items:center;padding:0 16px 16px}
+    .add-btn{background:linear-gradient(90deg,#ac46ff,#f6329a);border:none;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer}
+
+    /* MODAL OVERLAY */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+    .modal-overlay.show{display:flex}
+
+    /* MODAL FIX (THIS WAS THE MAIN BUG) */
+    .custom-modal{
+      background:#fff;
+      border-radius:18px;
+      max-width:880px;
+      width:100%;
+      display:flex;
+      gap:20px;
+      padding:20px;
+      max-height:90vh;
+      overflow:hidden;
+    }
+
+    .custom-left{flex:0 0 32%;min-width:240px}
+    .promo{text-align:center}
+    .promo img{width:120px;height:120px;border-radius:12px;object-fit:cover;margin-bottom:10px}
+
+    .custom-right{flex:1;overflow-y:auto;padding-right:6px}
+
+    .section-title{font-size:16px;font-weight:700;margin:14px 0 8px}
+
+    .sizes{display:flex;flex-direction:column;gap:10px}
+    .size-option,.topping-option{background:#faf7ff;border:1px solid #eee;padding:12px;border-radius:12px;font-size:14px}
+
+    .toppings{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+    .total-row{margin-top:14px;padding:14px;border-radius:12px;background:#f6f0ff;display:flex;justify-content:space-between;align-items:center}
+
+    .controls{display:flex;gap:12px;margin-top:14px}
+    .btn-addcart{flex:1;background:linear-gradient(90deg,#ac46ff,#f6329a);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:700}
+    .btn-cancel{background:#eee;border:none;padding:12px;border-radius:10px;font-weight:700}
+
+    /* MOBILE */
+    @media(max-width:900px){
+      .custom-modal{flex-direction:column;overflow-y:auto}
+      .toppings{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNhCZhxY_K0CUa6tZZOInH-FJuVklhurd0lA&s">
+    <h1>Hour Pizza</h1>
+  </div>
+  <nav>
+    <button id="cartBtn"><i class="fi fi-ss-cart-shopping-fast"></i><span id="navCount" style="font-size:12px;margin-left:4px">0</span></button>
+    <button id="profileBtn"><i class="fi fi-ss-user"></i></button>
+    <button id="menuBtn"><i class="fi fi-br-menu-burger"></i></button>
+
+    <div id="profileDropdown" class="dropdown" style="display:none;right:40px">
+      <p class="label">Logged in as</p>
+      <p class="email" id="userEmail">example@gmail.com</p>
+      <button onclick="goOrders()">My Orders</button>
+      <button onclick="goProfile()">Profile Settings</button>
+    </div>
+  </nav>
+</header>
+
+<!-- HAMBURGER OVERLAY -->
+<div id="menuOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;z-index:400"></div>
+
+<!-- HAMBURGER PANEL -->
+<aside id="menuPanel" class="menu-panel" style="position:fixed;top:0;right:0;width:280px;height:100%;background:#fff;box-shadow:-6px 0 30px rgba(0,0,0,.15);padding:24px;z-index:500;transform:translateX(100%);transition:transform .3s ease">
+  <h2 style="color:#8200da;margin-top:0">Menu</h2>
+  <button onclick="goProfile()">Profile</button>
+  <button onclick="goOrders()">My Orders</button>
+  <button class="logout" onclick="logout()">Logout</button>
+</aside>
+</header>
+
+<section class="hero">
+  <h2>Your Hour. Your Pizza. Ready Now.</h2>
+  <p>Delivered hot in 30 minutes — guaranteed.</p>
+</section>
+
+<div class="search-bar">
+  <input placeholder="Search pizzas...">
+</div>
+
+<section class="products">
+  <article class="card">
+    <div class="image" style="background-image:url('https://images.pexels.com/photos/2619967/pexels-photo-2619967.jpeg')"></div>
+    <div style="position:relative;padding:0 16px"><span class="tag">Classic</span></div>
+    <div class="card-content">
+      <h3>Pepperoni Classic</h3>
+      <p>Traditional pepperoni with mozzarella cheese</p>
+    </div>
+    <div class="bottom">
+      <strong class="price"></strong>
+      <button class="add-btn"
+  data-id="1"
+  data-name="Pepperoni Classic"
+  data-desc="Traditional pepperoni pizza"
+  data-img="https://images.pexels.com/photos/2619967/pexels-photo-2619967.jpeg"
+  data-base="499"
+>
+  Add
+</button>
+
+    </div>
+  </article>
+
+  <!-- PRODUCT 2 -->
+<article class="card">
+  <div class="image" style="background-image:url('https://images.pexels.com/photos/1435907/pexels-photo-1435907.jpeg')"></div>
+  <div style="position:relative;padding:0 16px">
+    <span class="tag">Popular</span>
+  </div>
+  <div class="card-content">
+    <h3>Cheese Lovers</h3>
+    <p>Loaded with mozzarella, cheddar, and parmesan</p>
+  </div>
+  <div class="bottom">
+    <strong>₱699</strong>
+    <button class="add-btn"
+  data-id="2"
+  data-name="Cheese Lovers"
+  data-desc="Loaded with mozzarella, cheddar, and parmesan"
+  data-img="https://images.pexels.com/photos/1435907/pexels-photo-1435907.jpeg"
+  data-base="699"
+>
+  Add
+</button>
+
+
+  </div>
+</article>
+
+<!-- PRODUCT 3 -->
+<article class="card">
+  <div class="image" style="background-image:url('https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg')"></div>
+  <div style="position:relative;padding:0 16px">
+    <span class="tag">New</span>
+  </div>
+  <div class="card-content">
+    <h3>BBQ Pizza</h3>
+    <p>Grilled Pizza with BBQ sauce and onions</p>
+  </div>
+  <div class="bottom">
+    <strong>₱899</strong>
+    <button class="add-btn"
+  data-id="3"
+  data-name="BBQ Chicken"
+  data-desc="Grilled chicken with BBQ sauce and onions"
+  data-img="https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg"
+  data-base="899"
+>
+  Add
+</button>
+
+
+  </div>
+</article>
+
+</section>
+
+<!-- ORDER SUMMARY MODAL -->
+<div class="modal-overlay" id="orderSummary">
+  <div class="custom-modal" onclick="event.stopPropagation()">
+    <!-- LEFT: ORDER SUMMARY -->
+    <div class="custom-left">
+      <h3 style="margin-top:0">Your Order</h3>
+      <div id="orderItems"></div>
+      <div style="margin-top:12px;font-size:14px">
+        <div style="display:flex;justify-content:space-between"><span>Subtotal</span><strong id="osSubtotal">₱0</strong></div>
+        <div style="display:flex;justify-content:space-between"><span>Delivery</span><strong id="deliveryFee"></strong>
+</div>
+        <div class="total-row"><strong>Total</strong><strong id="osTotal">₱0</strong></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: USER INFO -->
+    <div class="custom-right">
+      <h3 style="margin-top:0">Customer Info</h3>
+      <input id="osName" placeholder="Full Name" style="width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:1px solid #eee">
+      <input id="osEmail" placeholder="Email Address" style="width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:1px solid #eee">
+      <input id="osPhone" placeholder="Phone Number" style="width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:1px solid #eee">
+      <textarea id="osAddress" placeholder="Delivery Address" style="width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:1px solid #eee"></textarea>
+      <select id="paymentMethod"
+        style="width:100%;padding:12px;margin-bottom:14px;border-radius:10px;border:1px solid #eee">
+        <option>Select payment method</option>
+        <option>Cash on Delivery</option>
+        <option>Card</option>
+      </select>
+      <div class="controls">
+        <button class="btn-addcart" id="placeOrderBtn">Place Order</button>
+        <button class="btn-cancel" onclick="document.getElementById('orderSummary').classList.remove('show')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="custom-modal" onclick="event.stopPropagation()">
+    <div class="custom-left">
+      <div class="promo">
+        <img id="modalImg">
+          <h3 id="modalName"></h3>
+            <p id="modalDesc"></p>
+      </div>
+    </div>
+
+    <div class="custom-right">
+      <div class="section-title">Select Size</div>
+      <div class="sizes">
+<div class="size-option">
+  <label>
+    <input type="radio"
+           name="size"
+           data-id="1"
+           data-name="Small"
+           data-price="499"
+           checked>
+    Small ₱499
+  </label>
+</div>
+
+<div class="size-option">
+  <label>
+    <input type="radio"
+           name="size"
+           data-id="2"
+           data-name="Medium"
+           data-price="699">
+    Medium ₱699
+  </label>
+</div>
+
+<div class="size-option">
+  <label>
+    <input type="radio"
+           name="size"
+           data-id="3"
+           data-name="Large"
+           data-price="899">
+    Large ₱899
+  </label>
+</div>
+
+      <div class="section-title">Add Toppings</div>
+      <div class="topping-option">
+  <label>
+    <input type="checkbox"
+           data-id="1"
+           data-name="Extra Cheese"
+           data-price="30">
+    Extra Cheese +₱30
+  </label>
+</div>
+
+  <div class="topping-option">
+  <label>
+    <input type="checkbox"
+           data-id="2"
+           data-name="Bacon"
+           data-price="40">
+    Bacon +₱40
+  </label>
+</div>
+
+  <div class="topping-option">
+  <label>
+    <input type="checkbox"
+           data-id="3"
+           data-name="Mushrooms"
+           data-price="20">
+    Mushrooms +₱20
+  </label>
+</div>
+
+ <div class="topping-option">
+  <label>
+    <input type="checkbox"
+           data-id="4"
+           data-name="Onions"
+           data-price="10">
+    Onions +₱10
+  </label>
+</div>
+
+<div class="section-title">Quantity</div>
+<div class="quantity" style="display:flex;align-items:center;gap:12px">
+  <button id="qtyMinus">−</button>
+  <strong id="qtyValue">1</strong>
+  <button id="qtyPlus">+</button>
+</div>
+
+      <div class="total-row">
+  <strong>Total</strong>
+  <strong id="modalTotal">₱499</strong>
+</div>
+
+
+      <div class="controls">
+       <button class="btn-addcart" id="addToCartBtn">Add to Cart</button>
+        <button class="btn-cancel" onclick="document.getElementById('modal').classList.remove('show')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =====================
+   AUTH + CURRENT USER
+===================== */
+const currentUser = JSON.parse(localStorage.getItem('user'));
+
+if (!currentUser) {
+  window.location.href = 'index.html';
+}
+
+// Show logged-in user email in navbar
+const userEmailEl = document.getElementById('userEmail');
+if (userEmailEl) {
+  userEmailEl.textContent = currentUser.email;
+}
+
+/* =====================
+   PRICE FORMATTER (₱)
+===================== */
+function formatPeso(amount) {
+  return '₱' + Math.round(amount).toLocaleString('en-PH');
+}
+
+// Delivery fee
+const DELIVERY_FEE = 49;
+const deliveryFeeEl = document.getElementById('deliveryFee');
+deliveryFeeEl.textContent = formatPeso(DELIVERY_FEE);
+
+/* =====================
+   ELEMENT REFERENCES
+===================== */
+const cartBtn = document.getElementById('cartBtn');
+const profileBtn = document.getElementById('profileBtn');
+const profileDropdown = document.getElementById('profileDropdown');
+const navCount = document.getElementById('navCount');
+
+const orderSummary = document.getElementById('orderSummary');
+const orderItemsEl = document.getElementById('orderItems');
+const osSubtotalEl = document.getElementById('osSubtotal');
+const osTotalEl = document.getElementById('osTotal');
+
+
+/* =====================
+   CART STATE
+===================== */
+let cart = JSON.parse(localStorage.getItem('hp_cart') || '[]');
+navCount.textContent = cart.length;
+
+/* =====================
+   CART → ORDER SUMMARY
+===================== */
+cartBtn.onclick = () => {
+  renderOrderSummary();
+  autofillUserInfo();
+  orderSummary.classList.add('show');
+};
+
+function renderOrderSummary() {
+  orderItemsEl.innerHTML = '';
+  let subtotal = 0;
+
+  if (cart.length === 0) {
+    orderItemsEl.innerHTML = '<p style="color:#777">Your cart is empty</p>';
+  }
+
+  cart.forEach(item => {
+    subtotal += item.total_price;
+
+    const div = document.createElement('div');
+    div.style.background = '#faf7ff';
+    div.style.borderRadius = '12px';
+    div.style.padding = '12px';
+    div.style.marginBottom = '10px';
+    div.innerHTML = `
+     <strong>
+  ${item.product_name} (${item.size.name}) × ${item.quantity}
+</strong>
+<div style="font-size:13px;color:#555">
+  ${item.toppings.length ? item.toppings.map(t => t.name).join(', ') : 'No toppings'}
+</div>
+<div style="margin-top:6px;font-weight:700">
+  ${formatPeso(item.total_price)}
+</div>
+    `;
+    orderItemsEl.appendChild(div);
+  });
+
+  osSubtotalEl.textContent = formatPeso(subtotal);
+  osTotalEl.textContent = formatPeso(subtotal + DELIVERY_FEE);
+}
+
+/* =====================
+   USER → AUTOFILL
+===================== */
+function autofillUserInfo() {
+  if (!currentUser) return;
+
+  document.getElementById('osName').value =
+    (currentUser.first_name || '') + ' ' + (currentUser.last_name || '');
+
+  document.getElementById('osEmail').value = currentUser.email || '';
+  document.getElementById('osPhone').value = currentUser.phone || '';
+  document.getElementById('osAddress').value = currentUser.address || '';
+}
+
+/* =====================
+   PLACE ORDER
+===================== */
+document.getElementById('placeOrderBtn').onclick = placeOrder;
+
+function placeOrder() {
+  if (cart.length === 0) return alert('Cart is empty');
+    const paymentMethod = document.getElementById('paymentMethod').value;
+
+  if (paymentMethod === 'Select payment method') {
+    alert('Please select a payment method');
+    return;
+  }
+
+const address = document.getElementById('osAddress').value.trim();
+
+if (!address) {
+  alert('Please enter your delivery address');
+  document.getElementById('osAddress').focus();
+  return;
+}
+
+const order = {
+  id: Date.now(),
+
+  user_id: currentUser.id,          // ✅ ADD THIS
+
+  items: cart,
+
+  subtotal: Number(osSubtotalEl.textContent.replace(/[₱,]/g, '')),
+  delivery_fee: DELIVERY_FEE,
+  total: Number(osTotalEl.textContent.replace(/[₱,]/g, '')),
+
+ payment_method: document.querySelector('select').value,
+ delivery_address: address,
+
+
+  date: new Date().toISOString(),   // ✅ better than localeString
+  status: 'Pending'
+};
+
+
+
+  const orders = JSON.parse(localStorage.getItem('hp_orders') || '[]');
+  orders.push(order);
+
+  localStorage.setItem('hp_orders', JSON.stringify(orders));
+  localStorage.removeItem('hp_cart');
+
+  cart = [];
+  navCount.textContent = 0;
+  orderSummary.classList.remove('show');
+
+  alert('Order placed successfully! You can view it in My Orders.');
+}
+
+/* =====================
+   PROFILE + MENU
+===================== */
+profileBtn.onclick = (e) => {
+  e.stopPropagation();
+  profileDropdown.style.display =
+    profileDropdown.style.display === 'block' ? 'none' : 'block';
+};
+
+document.addEventListener('click', () => {
+  profileDropdown.style.display = 'none';
+});
+
+function goProfile() { window.location.href = 'profile.html'; }
+function goOrders() { window.location.href = 'orders.html'; }
+
+const modal = document.getElementById('modal');
+modal.addEventListener('click', () => modal.classList.remove('show'));
+
+const menuBtn = document.getElementById('menuBtn');
+const menuPanel = document.getElementById('menuPanel');
+const menuOverlay = document.getElementById('menuOverlay');
+
+menuBtn.onclick = () => {
+  menuPanel.style.transform = 'translateX(0)';
+  menuOverlay.style.display = 'block';
+};
+
+menuOverlay.onclick = closeMenu;
+
+function closeMenu() {
+  menuPanel.style.transform = 'translateX(100%)';
+  menuOverlay.style.display = 'none';
+}
+
+function logout() {
+  localStorage.removeItem('user');
+  window.location.href = 'index.html';
+}
+
+/* =====================
+   ADD TO CART
+===================== */
+const addToCartBtn = document.getElementById('addToCartBtn');
+let currentProduct = null;
+let quantity = 1;
+
+
+
+addToCartBtn.onclick = () => {
+let selectedSize = {
+  id: null,
+  name: '',
+  price: 0
+};
+
+document.querySelectorAll('.sizes input[type="radio"]').forEach(radio => {
+  if (radio.checked) {
+    selectedSize.id = Number(radio.dataset.id);
+    selectedSize.name = radio.dataset.name;
+    selectedSize.price = Number(radio.dataset.price);
+  }
+});
+
+
+
+let toppings = [];
+let toppingsPrice = 0;
+
+document.querySelectorAll('.toppings input[type="checkbox"]:checked')
+.forEach(cb => {
+  const topping = {
+    id: Number(cb.dataset.id),
+    name: cb.dataset.name,
+    price: Number(cb.dataset.price)
+  };
+
+  toppings.push(topping);
+  toppingsPrice += topping.price;
+});
+
+
+const unitPrice = selectedSize.price + toppingsPrice;
+const totalPrice = unitPrice * quantity;
+
+const item = {
+  product_id: currentProduct.id,
+  product_name: currentProduct.name,
+
+  size: selectedSize,          // ✅ object, not string
+  toppings: toppings,          // ✅ already correct
+
+  quantity: quantity,
+
+  unit_price: unitPrice,       // ✅ numeric
+  total_price: totalPrice      // ✅ numeric
+};
+
+
+
+
+  cart.push(item);
+  localStorage.setItem('hp_cart', JSON.stringify(cart));
+  navCount.textContent = cart.length;
+
+  modal.classList.remove('show');
+  alert('Added to cart!');
+};
+
+/* =====================
+   PRODUCT MODAL
+===================== */
+document.querySelectorAll('.add-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentProduct = {
+  id: Number(btn.dataset.id),
+  name: btn.dataset.name,
+  description: btn.dataset.desc,
+  image: btn.dataset.img,
+  base_price: Number(btn.dataset.base)
+};
+
+document.getElementById('modalImg').src = currentProduct.image;
+document.getElementById('modalName').textContent = currentProduct.name;
+document.getElementById('modalDesc').textContent = currentProduct.description;
+
+
+    quantity = 1;
+    document.getElementById('qtyValue').textContent = 1;
+
+    document.querySelectorAll('.toppings input').forEach(cb => cb.checked = false);
+    document.querySelector('input[name="size"]').checked = true;
+    
+    calculateModalTotal();
+    modal.classList.add('show');
+  });
+});
+
+/* =====================
+   LIVE PRICE + QUANTITY
+===================== */
+const qtyValue = document.getElementById('qtyValue');
+const modalTotal = document.getElementById('modalTotal');
+const qtyPlus = document.getElementById('qtyPlus');
+qtyPlus.onclick = () => {
+  quantity++;
+  qtyValue.textContent = quantity;
+  calculateModalTotal();
+};
+const qtyMinus = document.getElementById('qtyMinus');
+qtyMinus.onclick = () => {
+  if (quantity > 1) {                 // 🚫 prevent 0 or negative
+    quantity--;
+    qtyValue.textContent = quantity;
+    calculateModalTotal();
+  }
+};
+
+
+function calculateModalTotal() {
+  if (!currentProduct) {
+    modalTotal.textContent = formatPeso(0);
+    return;
+  }
+
+  let basePrice = 0;
+
+  document.querySelectorAll('input[name="size"]').forEach(radio => {
+    if (radio.checked) {
+      basePrice = Number(radio.dataset.price);
+    }
+  });
+
+  let toppingsPrice = 0;
+  document.querySelectorAll('.toppings input:checked')
+    .forEach(cb => toppingsPrice += Number(cb.dataset.price));
+
+  const total = (basePrice + toppingsPrice) * quantity;
+  modalTotal.textContent = formatPeso(total);
+}
+
+
+
+document.querySelectorAll('input[name="size"], .toppings input')
+  .forEach(el => el.addEventListener('change', calculateModalTotal));
+
+calculateModalTotal();
+
+/* =====================
+   AUTO-FILL PRODUCT PRICES (STEP 2)
+===================== */
+document.querySelectorAll('.card').forEach(card => {
+  const btn = card.querySelector('.add-btn');
+  const priceEl = card.querySelector('.price');
+
+  if (!btn || !priceEl) return;
+
+  const basePrice = Number(btn.dataset.base);
+  priceEl.textContent = formatPeso(basePrice);
+});
+
+</script>
+
+
+</body>
+</html>
